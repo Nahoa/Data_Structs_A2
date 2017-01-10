@@ -1,15 +1,20 @@
 #pragma once
 
-#include "Node.h"
+//class List<T>;
 
 
-class List
+template <typename T>
+class Node
 {
+	friend class List<T>;
 public:
-	List();
-	~List();
+	Node();
+	Node & Node(const Node & copy);
+	Node & operator=(const Node & rhs);
+	~Node();
 private:
-	Node * m_head;
-	Node * m_tail;
+	T Data;
+	Node * m_Next;
+	Node * m_Previous;
 };
 
