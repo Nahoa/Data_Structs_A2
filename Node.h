@@ -18,3 +18,23 @@ private:
 	Node * m_Previous;
 };
 
+template<typename T>
+inline Node<T>::Node()
+{
+}
+
+template<typename T>
+inline Node<T>::Node(const Node & copy)
+{
+}
+
+template<typename T>
+inline Node & Node<T>::operator=(const Node & rhs)
+{
+	// TODO: insert return statement here
+}
+
+template<typename T>
+inline Node<T>::~Node()
+{
+}
