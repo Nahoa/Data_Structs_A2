@@ -25,3 +25,71 @@ private:
 	Node<T> * m_Tail;
 };
 
+template<typename T>
+inline List<T>::List()
+{
+}
+
+template<typename T>
+inline List<T>::List(const List & copy)
+{
+}
+
+template<typename T>
+inline List & List<T>::operator=(const List & rhs)
+{
+	// TODO: insert return statement here
+}
+
+template<typename T>
+inline List<T>::~List()
+{
+}
+
+template<typename T>
+inline bool List<T>::isEmpty()
+{
+	return false;
+}
+
+template<typename T>
+inline Node & List<T>::First() const
+{
+	// TODO: insert return statement here
+}
+
+template<typename T>
+inline Node & List<T>::Last() const
+{
+	// TODO: insert return statement here
+}
+
+template<typename T>
+inline void List<T>::Prepend(T Data)
+{
+}
+
+template<typename T>
+inline void List<T>::Append(T Data)
+{
+}
+
+template<typename T>
+inline void List<T>::Purge()
+{
+}
+
+template<typename T>
+inline void List<T>::Extract(T Data)
+{
+}
+
+template<typename T>
+inline void List<T>::InsertAfter(T Data, T insertafter)
+{
+}
+
+template<typename T>
+inline void List<T>::InsertBefore(T Data, T insertbefore)
+{
+}
