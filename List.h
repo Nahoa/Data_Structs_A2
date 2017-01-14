@@ -11,16 +11,17 @@ public:
 	List & operator=(const List & rhs);
 	~List();
 	int Search(T Data);
-	//	List * gethead() { return m_head; }
-	//	List * gettail() { return m_tail; }
+	Node<T> * gethead() { return m_head; }
+	Node<T> * gettail() { return m_tail; }
 	bool isEmpty();
-	//Node & First() const;
-	//Node & Last() const;
+	T & First() const;
+	T & Last() const;
+	void Display();
 	void Prepend(T Data); //adds to the front of the list
 	void Append(T Data); //adds to the end of the list maybe pointer?
 	void Extract(T Data);
 	void InsertAfter(T NData, T insertafter); //(element to insert, after other node)
-	//void InsertBefore(T NData, T insertbefore); //(element to insert, before other node)
+	void InsertBefore(T NData, T insertbefore); //(element to insert, before other node)
 	void Purge();
 
 private:
@@ -50,7 +51,7 @@ inline List<T> & List<T>::operator=(const List & rhs)
 		{
 			Purge();
 		}
-		
+
 		Node<T> * travel = rhs.m_head;
 		while (travel)
 		{
@@ -114,27 +115,63 @@ inline bool List<T>::isEmpty()
 {
 	bool found = false;
 
-	//Node<T> * travel = m_head;
-	//Node<T> * back = m_tail;
-
 	if (m_head == nullptr && m_tail == nullptr) // if the head and tail point to nullptr then the string is empty
 		found = true;
 
 	return found;
 }
-//
-//template<typename T>
-//inline Node & List<T>::First() const
-//{
-//	// TODO: insert return statement here
-//}
-//
-//template<typename T>
-//inline Node & List<T>::Last() const
-//{
-//	// TODO: insert return statement here
-//}
-//
+template<typename T>
+inline T & List<T>::First() const
+{
+	if (m_head == nullptr)
+	{
+		throw Exception("Head is Empty!!")
+	}
+
+	return m_head->Data;
+}
+
+template<typename T>
+inline T & List<T>::Last() const
+{	
+	if (m_tail == nullptr)
+	{
+		throw Exception("Head is Empty!!")
+	}
+
+	return m_tail->Data;
+}
+
+template<typename T>
+inline void List<T>::Display()
+{
+	Node<T> * travel = m_head;
+	Node<T> * back = m_tail;
+
+	if (m_head == nullptr)
+	{
+		cout << "list is empty" << endl;
+	}
+
+	while (travel)
+	{
+		cout << travel->Data << " ";
+		travel = travel->m_next;
+	}
+
+	cout << endl;
+
+	// uncomment to see it in reverse
+	/*while (back)
+	{
+		cout << back->Data << "";
+		back = back->m_previous;
+	}
+
+	cout << std::endl;*/
+
+}
+
 template<typename T>
 inline void List<T>::Prepend(T Data)
 {
@@ -145,7 +182,7 @@ inline void List<T>::Prepend(T Data)
 		m_tail = nn;
 		m_head = nn; //head is always going to be the new node
 	}
-	else 
+	else
 	{
 		m_head->m_previous = nn;
 		nn->m_next = m_head; //assigning the m_head to new nodes m_next pointer
@@ -168,19 +205,20 @@ inline void List<T>::Extract(T Data)
 
 	if (index == -1)
 	{
-		//throw exception
+		throw Exception("Data not found!");
 	}
 	else
 	{
-		if (Data == m_head->Data) // head pointer reassigns
+		if (travel->Data == m_head->Data) // head pointer reassigns
 		{
 			m_head = m_head->m_next;
 			delete travel;
 			travel = nullptr;
 		}
-		else if (Data == m_tail->Data) //tail pointer reassigns
+		else if (travel->Data == m_tail->Data) //tail pointer reassigns
 		{
 			m_tail = m_tail->m_previous;
+			m_tail->m_next = nullptr;
 			delete travel;
 			travel = nullptr;
 		}
@@ -201,45 +239,87 @@ inline void List<T>::Append(T Data)
 	if (m_head == nullptr) // when the first node is created it will allways be the tail
 	{
 		m_tail = nn;
-		m_head = nn; 
+		m_head = nn;
 	}
 	else
 	{
 		m_tail->m_next = nn;
-		nn->m_previous = m_tail; 
-		m_tail = nn; 
+		nn->m_previous = m_tail;
+		m_tail = nn;
 		nn->m_next = nullptr;
 	}
 
 }
 
 
-//template<typename T>
-//inline void List<T>::Extract(T Data)
-//{
-//}
-//
 template<typename T>
-inline void List<T>::InsertAfter(T Data, T insertafter)
+inline void List<T>::InsertAfter(T NData, T insertafter)
 {
 	Node<T> * travel = m_head;
 
 	int index = Search(insertafter);
 
+	for (int i = 0; i < index; i++)
+	{
+		travel = travel->m_next;
+	}
+
 	if (index == -1)
 	{
-		//throw exception
+		throw Exception("Data not found!");
 	}
 	else
 	{
-		if (travel->Data == m_head->Data)
-		{
+			 if (travel->Data == m_tail->Data) //tail pointer reassigns
+			{
+				Append(NData);
 			
+			}
+			else
+			{
+
+				Node<T> * nn = new Node<T>(NData);
+				nn->m_next = travel->m_next;
+				nn->m_previous = travel;//assigns the old pointer 
+				travel->m_next = nn;
+				nn->m_next->m_previous = nn;
+				
+
+			}
+		}
+}
+
+template<typename T>
+inline void List<T>::InsertBefore(T NData, T insertbefore)
+{
+	Node<T> * travel = m_head;
+
+	int index = Search(insertbefore);
+
+	for (int i = 0; i < index; i++)
+	{
+		travel = travel->m_next;
+	}
+
+	if (index == -1)
+	{
+		throw Exception("Data not found!");
+	}
+	else
+	{
+		if (travel->Data == m_head->Data) //tail pointer reassigns
+		{
+			Prepend(NData);
+
+		}
+		else
+		{
+
+			Node<T> * nn = new Node<T>(NData);
+			nn->m_previous = travel->m_previous;
+			nn->m_next = travel;//assigns the old pointer 
+			travel->m_previous = nn;
+			travel->m_previous->m_previous->m_next = nn;
 		}
 	}
 }
-
-//template<typename T>
-//inline void List<T>::InsertBefore(T Data, T insertbefore)
-//{
-//}
